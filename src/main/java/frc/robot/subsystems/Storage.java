@@ -10,8 +10,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
-import io.github.oblarg.oblog.annotations.Log;
-
 import static frc.robot.Constants.StorageConstants;
 
 import edu.wpi.first.wpilibj.AnalogInput;

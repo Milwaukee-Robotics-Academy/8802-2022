@@ -1,31 +1,18 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.SplitArcadeDrive;
 import frc.robot.commands.AdvanceStorageToShooter;
 import frc.robot.commands.Autonomous;
-import frc.robot.commands.IntakeDown;
-import frc.robot.commands.IntakeIn;
-import frc.robot.commands.IntakeOut;
-import frc.robot.commands.IntakeStop;
-import frc.robot.commands.IntakeUp;
 import frc.robot.commands.MoveShooterDown;
 import frc.robot.commands.MoveShooterUp;
-import frc.robot.commands.MoveUpStorage;
 import frc.robot.commands.RunStorageWithPhotoeyes;
 import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.SplitArcadeDrive;
-import frc.robot.commands.StartUpShooter;
-import frc.robot.commands.StopShooter;
-import frc.robot.commands.StopStorage;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -36,7 +23,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Storage m_storage = new Storage();
   private final Shooter m_shooter = new Shooter();
-  private final Climber m_climber = new Climber();
+
 
  // private final PowerDistributionPanel pdp = new PowerDistributionPanel();
   private final XboxController driverController = new XboxController(0);
@@ -79,12 +66,10 @@ public void configureButtonBindings() {
   final JoystickButton operatorA = new JoystickButton(operatorController, XboxController.Button.kA.value);
   final JoystickButton operatorB = new JoystickButton(operatorController, XboxController.Button.kB.value);
   final JoystickButton operatorX = new JoystickButton(operatorController, XboxController.Button.kX.value);
-  final JoystickButton operatorY = new JoystickButton(operatorController, XboxController.Button.kY.value);
   final JoystickButton driverA = new JoystickButton(driverController, XboxController.Button.kA.value);
   final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
   final JoystickButton oepratorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
   final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
-  final JoystickButton operatorBaButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
   final JoystickButton operatorLeftStick = new JoystickButton(operatorController, XboxController.Button.kLeftStick.value);
   final JoystickButton operatorRightStick = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);
   operatorA.whenPressed(new InstantCommand(m_intake::rotateIn, m_intake));
