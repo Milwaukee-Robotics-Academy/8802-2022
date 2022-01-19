@@ -12,17 +12,13 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DriveConstants;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
-
-import static frc.robot.Constants.DriveConstants;
-
-import java.util.function.DoubleSupplier;
 
 public class Drive extends SubsystemBase implements Loggable {
   private final WPI_TalonFX m_LeftMotor = new WPI_TalonFX(DriveConstants.kLeftMotorFrontPort);
