@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AdvanceStorageToShooter;
 import frc.robot.commands.Autonomous;
-import frc.robot.commands.MoveShooterDown;
-import frc.robot.commands.MoveShooterUp;
 import frc.robot.commands.RunStorageWithPhotoeyes;
 import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.SplitArcadeDrive;
@@ -33,17 +31,11 @@ public class RobotContainer {
 public RobotContainer() {
 
   Shuffleboard.getTab("Shooter").add("AdvanceStorageToShooter", new AdvanceStorageToShooter(m_storage));
-  // SmartDashboard.putNumber("Shooter Front", 0);
-  // SmartDashboard.putNumber("Shooter Back", 0);
-   Shuffleboard.getTab("Intake").add("intake In", new InstantCommand(m_intake::rotateIn, m_intake));
-   Shuffleboard.getTab("Intake").add("intake Out", new InstantCommand(m_intake::rotateOut, m_intake));
-   Shuffleboard.getTab("Intake").add("intake Up", new InstantCommand(m_intake::moveUp, m_intake));
-   Shuffleboard.getTab("Intake").add("intake Down", new InstantCommand(m_intake::moveDown, m_intake));
-   Shuffleboard.getTab("Intake").add("intake Stop", new InstantCommand(m_intake::rotateStop, m_intake));
-  Shuffleboard.getTab("Shooter").add("Move Shooter Up", new MoveShooterUp(m_shooter));
-  Shuffleboard.getTab("Shooter").add("Move Shooter Down", new MoveShooterDown(m_shooter)); 
-  //Shuffleboard.getTab("").add("Start Shooter", new InstantCommand(m_shooter::runShooter, m_shooter));
- // Shuffleboard.getTab("Shooter").add("Start Shooter", new StartUpShooter(Shuffleboard.getTab("Shooter").add("Front", 0).getEntry().getDouble(0), Shuffleboard.getTab("Shooter").add("Back", 0).getEntry().getDouble(0), m_shooter));
+  Shuffleboard.getTab("Intake").add("intake In", new InstantCommand(m_intake::rotateIn, m_intake));
+  Shuffleboard.getTab("Intake").add("intake Out", new InstantCommand(m_intake::rotateOut, m_intake));
+  Shuffleboard.getTab("Intake").add("intake Up", new InstantCommand(m_intake::moveUp, m_intake));
+  Shuffleboard.getTab("Intake").add("intake Down", new InstantCommand(m_intake::moveDown, m_intake));
+  Shuffleboard.getTab("Intake").add("intake Stop", new InstantCommand(m_intake::rotateStop, m_intake));
   Shuffleboard.getTab("Shooter").add("Stop Shooter", new InstantCommand(m_shooter::stopShooter,m_shooter));
   Shuffleboard.getTab("Shooter").add("SHOOT!!!", new ShooterShoot(m_shooter,m_storage));
   Shuffleboard.getTab("Storage").add("Turn In Storage", new InstantCommand(m_storage::turnIn, m_storage));
