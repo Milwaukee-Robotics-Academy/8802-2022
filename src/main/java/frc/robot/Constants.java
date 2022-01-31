@@ -12,10 +12,15 @@ package frc.robot;
  */
 public final class Constants {
     public static final class DriveConstants {
-        public static final int kLeftMotorFrontPort = 10; //can id
-        public static final int kLeftMotorRearPort = 11; //can id
-        public static final int kRightMotorFrontPort = 12; //can id
-        public static final int kRightMotorRearPort = 13; //can id
+        public static final int kLeftMotorFrontPort = 0; //can id
+        public static final int kLeftMotorRearPort = 1; //can id
+        public static final int kRightMotorFrontPort = 2; //can id
+        public static final int kRightMotorRearPort = 3; //can id
+        public static final int kLeftEncoder1 = 0;
+        public static final int kLeftEncoder2 = 1;
+        public static final int kRightEncoder1 = 2;
+        public static final int kRightEncoder2 = 3;
+        
     }
     public static final class IntakeConstants {
         public static final int kIntakeMotor = 6; //pwm
