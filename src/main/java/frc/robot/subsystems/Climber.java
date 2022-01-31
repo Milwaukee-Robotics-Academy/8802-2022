@@ -21,7 +21,7 @@ public class Climber extends SubsystemBase implements Loggable {
    */
   static Spark climberLeft = new Spark(ClimberConstants.kClimberMotorLeft);
   static Spark climberRight = new Spark(ClimberConstants.kClimberMotorRight);
-  private final DoubleSolenoid climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,ClimberConstants.kClimberSolenoid1, ClimberConstants.kClimberSolenoid2);
+  // private final DoubleSolenoid climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,ClimberConstants.kClimberSolenoid1, ClimberConstants.kClimberSolenoid2);
 
   public Climber() {
 
@@ -30,13 +30,13 @@ public class Climber extends SubsystemBase implements Loggable {
  * This elongates the elevator to hook onto the bar
  */
 public void extend() {
-  climberSolenoid.set(DoubleSolenoid.Value.kForward);
+  // climberSolenoid.set(DoubleSolenoid.Value.kForward);
   }
   
   /**
    * This shrinks the elevator to lift the robot
    */
   public void unextend() {
-    climberSolenoid.set(DoubleSolenoid.Value.kReverse);
+    // climberSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 }

@@ -7,15 +7,23 @@
 
 package frc.robot.subsystems;
 
+import org.photonvision.PhotonCamera;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
+import io.github.oblarg.oblog.annotations.Config;
+import io.github.oblarg.oblog.annotations.Log;
 
 public class Vision extends SubsystemBase implements Loggable {
+  @Log.CameraStream
+  private final PhotonCamera visionCamera = new PhotonCamera("photonvision");
+  @Log.CameraStream
+  private final PhotonCamera driverCamera = new PhotonCamera("driverView");
   /**
    * Creates a new Vision.
    */
   public Vision() {
 
+    driverCamera.setDriverMode(true);
   }
 
   public double getDistance(){

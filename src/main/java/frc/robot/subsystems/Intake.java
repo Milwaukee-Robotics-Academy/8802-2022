@@ -21,8 +21,7 @@ public class Intake extends SubsystemBase implements Loggable {
    */
   private final Spark intake = new Spark(IntakeConstants.kIntakeMotor);
 
-  private final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,IntakeConstants.kIntakeSolenoid1, IntakeConstants.kIntakeSolenooid2);
-
+  
    public Intake() {
      intake.setInverted(true);
   }
@@ -32,7 +31,7 @@ public class Intake extends SubsystemBase implements Loggable {
    */
   @Config
   public void moveUp () {
-    intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+//intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
     //moveUp = true;
   }
   
@@ -41,7 +40,7 @@ public class Intake extends SubsystemBase implements Loggable {
    */
   @Config
   public void moveDown () {
-    intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+ //   intakeSolenoid.set(DoubleSolenoid.Value.kForward);
     //moveUp = false;
   }
 
