@@ -9,15 +9,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Storage;
+import frc.robot.subsystems.Blower;
 
 public class ShooterShoot extends CommandBase {
   private final Shooter m_Shooter;
-  private final Storage m_storage;
+  private final Blower m_storage;
   /**
    * Creates a new ShooterShoot.
    */
-  public ShooterShoot(Shooter shooter, Storage storage) {
+  public ShooterShoot(Shooter shooter, Blower storage) {
     m_Shooter = shooter;
     m_storage = storage;
  
@@ -35,7 +35,7 @@ public class ShooterShoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_storage.turnIn();
+    m_storage.blow();
     m_Shooter.runShooter();
   }
 

@@ -27,13 +27,19 @@ public final class Constants {
         public static final int kIntakeSolenoid1 = 3;
         public static final int kIntakeSolenooid2 = 0;
     }
-    public static final class StorageConstants {
-        public static final int kStorageLeft = 4; //pwm
-        public static final int kStorageRight = 7; //pwm
-        //public static final int kFlapperSolenoid1 = 2;
-        //public static final int kFlapperSolenoid2 = 3;
-        public static int kPhotoEye1 = 0; //DIO
-        public static int kPhotoEye2 = 1; //DIO
+    public static final class BlowerConstants {
+        public static final int kMain = 4; //can
+        public static final int kFollower = 7; //can
+        public static final double kP = 6e-5;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kIz = 0;
+        public static final double kFF = 0.000015;
+        public static final double kMaxOutput = 1;
+        public static final double kMinOutput = 0;
+        public static final double kMaxRPM = 5700;
+        
+                
     }
     public static final class ShooterConstants{
         public static final int kFrontFollowerMotorPort = 0; //
