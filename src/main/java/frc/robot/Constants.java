@@ -20,7 +20,18 @@ public final class Constants {
         public static final int kLeftEncoder2 = 1;
         public static final int kRightEncoder1 = 2;
         public static final int kRightEncoder2 = 3;
-        
+        public static final double kP = 6e-5;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kIz = 0;
+        public static final double kFF = 0.000015;  
+        public static final double kMaxSpeed = 3.0; // meters per second
+        public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
+        public static final double kTrackWidth = 0.5588; // meters
+        public static final double kWheelRadius = 0.1524; // meters
+        public static final int kEncoderResolution = 5; //CIMcoder has 5 CPR this may need to be adjusted * 10.71 for gearbox
+        public static final double kSlewSpeedLimit = .3;// Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
+        public static final double kSlewRotLimit = .3;  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
     }
     public static final class IntakeConstants {
         public static final int kIntakeMotor = 6; //pwm

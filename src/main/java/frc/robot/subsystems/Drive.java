@@ -9,7 +9,10 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -26,28 +29,30 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Drive extends SubsystemBase implements Loggable {
-  private final Victor m_LeftMotor = new Victor(DriveConstants.kLeftMotorFrontPort);
-  private final Victor m_LeftFollowerMotor = new Victor(DriveConstants.kLeftMotorRearPort);
-  private final Victor m_RightMotor = new Victor(DriveConstants.kRightMotorFrontPort);
-  private final Victor m_RightFollowerMotor = new Victor(DriveConstants.kRightMotorRearPort);
-  private final MotorControllerGroup m_LeftMotors = new MotorControllerGroup(m_LeftMotor, m_LeftFollowerMotor);
-  private final MotorControllerGroup m_RightMotors = new MotorControllerGroup(m_RightMotor, m_RightFollowerMotor);
-  private final Encoder m_LeftEncoder = new Encoder(DriveConstants.kLeftEncoder1,DriveConstants.kLeftEncoder2);
-  private final Encoder m_RightEncoder = new Encoder(DriveConstants.kRightEncoder1,DriveConstants.kRightEncoder2);
+  private final Victor m_leftMotor = new Victor(DriveConstants.kLeftMotorFrontPort);
+  private final Victor m_leftFollowerMotor = new Victor(DriveConstants.kLeftMotorRearPort);
+  private final Victor m_rightMotor = new Victor(DriveConstants.kRightMotorFrontPort);
+  private final Victor m_rightFollowerMotor = new Victor(DriveConstants.kRightMotorRearPort);
+  private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor, m_leftFollowerMotor);
+  private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightMotor, m_rightFollowerMotor);
+  private final Encoder m_leftEncoder = new Encoder(DriveConstants.kLeftEncoder1,DriveConstants.kLeftEncoder2);
+  private final Encoder m_rightEncoder = new Encoder(DriveConstants.kRightEncoder1,DriveConstants.kRightEncoder2);
   
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(DriveConstants.kSlewSpeedLimit);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kSlewRotLimit);
 
-  public static final double kMaxSpeed = 3.0; // meters per second
-  public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
 
-  private static final double kTrackWidth = 0.5588; // meters
-  private static final double kWheelRadius = 0.1524; // meters
-  private static final int kEncoderResolution = 5; //CIMcoder has 5 CPR this may need to be adjusted * 10.71 for gearbox
+
+  private final PIDController m_leftPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+  private final PIDController m_rightPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+
+
+  // Gains are for example purposes only - must be determined for your own robot!
+  private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(1, 3);
 
   private final DifferentialDriveKinematics m_kinematics =
-  new DifferentialDriveKinematics(kTrackWidth);
+  new DifferentialDriveKinematics(DriveConstants.kTrackWidth);
 
 private final DifferentialDriveOdometry m_odometry;
 
@@ -55,15 +60,25 @@ private final DifferentialDriveOdometry m_odometry;
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   @Log.DifferentialDrive
-  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_LeftMotors, m_RightMotors);
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
  /**
    * Creates a new drive.
    */
   public Drive() {
-    m_LeftMotors.setInverted(true);
-    m_gyro.reset();
+    m_leftMotors.setInverted(true);
+
     m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+    // Set the distance per pulse for the drive encoders. We can simply use the
+    // distance traveled for one rotation of the wheel divided by the encoder
+    // resolution.
+    m_leftEncoder.setDistancePerPulse(2 * Math.PI * DriveConstants.kWheelRadius / DriveConstants.kEncoderResolution);
+    m_rightEncoder.setDistancePerPulse(2 * Math.PI * DriveConstants.kWheelRadius / DriveConstants.kEncoderResolution);
+
+    //Reset the sensors
+    m_gyro.reset(); 
+    m_leftEncoder.reset();
+    m_rightEncoder.reset();
   }
 
    /**
@@ -76,7 +91,7 @@ private final DifferentialDriveOdometry m_odometry;
    */
   public void drive(double rightThrottle, double leftThrottle, double rotation) {
     var wheelSpeeds = m_kinematics.toWheelSpeeds(
-      new ChassisSpeeds((m_speedLimiter.calculate(rightThrottle - leftThrottle)*kMaxSpeed), 0.0, m_rotLimiter.calculate(-rotation))
+      new ChassisSpeeds((m_speedLimiter.calculate(rightThrottle - leftThrottle)*DriveConstants.kMaxSpeed), 0.0, m_rotLimiter.calculate(-rotation))
       );
       this.setSpeeds(wheelSpeeds);
     }
@@ -99,15 +114,15 @@ private final DifferentialDriveOdometry m_odometry;
    * @param speeds The desired wheel speeds.
    */
   public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-    // final double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
-    // final double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
+    final double leftFeedforward = m_feedforward.calculate(speeds.leftMetersPerSecond);
+    final double rightFeedforward = m_feedforward.calculate(speeds.rightMetersPerSecond);
 
-    // final double leftOutput =
-    //     m_leftPIDController.calculate(m_leftEncoder.getRate(), speeds.leftMetersPerSecond);
-    // final double rightOutput =
-    //     m_rightPIDController.calculate(m_rightEncoder.getRate(), speeds.rightMetersPerSecond);
-    // m_leftGroup.setVoltage(leftOutput + leftFeedforward);
-    // m_rightGroup.setVoltage(rightOutput + rightFeedforward);
+    final double leftOutput =
+        m_leftPIDController.calculate(m_leftEncoder.getRate(), speeds.leftMetersPerSecond);
+    final double rightOutput =
+        m_rightPIDController.calculate(m_rightEncoder.getRate(), speeds.rightMetersPerSecond);
+    m_leftMotors.setVoltage(leftOutput + leftFeedforward);
+    m_rightMotors.setVoltage(rightOutput + rightFeedforward);
   }
 
 
@@ -121,25 +136,43 @@ private final DifferentialDriveOdometry m_odometry;
 
   @Config
   public void tank(double left, double right){
-    m_LeftMotor.set(left);
-    m_RightMotor.set(right);
+    m_leftMotor.set(left);
+    m_rightMotor.set(right);
   }
   
   public void stopDrive(){
     this.tank(0, 0);
   }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  /** Updates the field-relative position. */
+  public void updateOdometry() {
+    m_odometry.update(
+        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
   }
 @Log(name = "Left Encoder")
   public int getLeftEncoderPosition(){
-    return m_LeftEncoder.get();
+    return m_leftEncoder.get();
   }
 
   @Log(name = "Right Encoder")
   public int getRightEncoderPosition(){
-    return m_RightEncoder.get();
+    return m_rightEncoder.get();
+  }
+  
+  /**
+   * Resets the field-relative position to a specific location.
+   *
+   * @param pose The position to reset to.
+   */
+  public void resetOdometry(Pose2d pose) {
+    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+  }
+
+  /**
+   * Returns the pose of the robot.
+   *
+   * @return The pose of the robot.
+   */
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
   }
 }
