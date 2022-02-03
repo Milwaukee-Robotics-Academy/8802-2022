@@ -8,6 +8,11 @@
 package frc.robot.subsystems;
 
 import org.photonvision.PhotonCamera;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Config;
@@ -15,6 +20,7 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class Vision extends SubsystemBase implements Loggable {
   @Log.CameraStream
+  HttpCamera m_usb;
   private final PhotonCamera visionCamera = new PhotonCamera("photonvision");
   @Log.CameraStream
   private final PhotonCamera driverCamera = new PhotonCamera("driverView");
@@ -24,11 +30,17 @@ public class Vision extends SubsystemBase implements Loggable {
   public Vision() {
 
     driverCamera.setDriverMode(true);
+    m_usb = new HttpCamera("CoprocessorCamera", "https://10.88.2.92:1181");
+    HttpCamera m_rpi = new HttpCamera("CoprocessorCamera", "https://10.88.2.92:1182");
+
+
+    
+
+    Shuffleboard.getTab("Vision")
+        .add(m_usb);
   }
 
-  public double getDistance(){
-    return 1.0;
-
+  public void switchCamera(){
   }
 
   @Override
