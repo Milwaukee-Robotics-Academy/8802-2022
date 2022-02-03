@@ -40,11 +40,13 @@ public class Drive extends SubsystemBase implements Loggable {
    * Creates a new drive.
    */
   public Drive() {
-    m_LeftMotors.setInverted(true);
+    m_RightMotors.setInverted(true);
+    m_RightEncoder.setReverseDirection(true);
+
   }
 
   public void drive(double rightThrottle, double leftThrottle, double rotation) {
-     m_robotDrive.arcadeDrive(this.deadband(rightThrottle - leftThrottle), this.deadband(-rotation));
+     m_robotDrive.arcadeDrive(this.deadband(leftThrottle- rightThrottle ), this.deadband(rotation));
     }
     public double deadband(double value){
       //Upper Deadband//

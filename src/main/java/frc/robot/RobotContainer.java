@@ -15,12 +15,14 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Storage;
+import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
   private final Drive m_drive = new Drive();
   private final Intake m_intake = new Intake();
   private final Storage m_storage = new Storage();
   private final Shooter m_shooter = new Shooter();
+  private final Vision m_vision = new Vision();
 
 
  // private final PowerDistributionPanel pdp = new PowerDistributionPanel();

@@ -14,9 +14,9 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Vision extends SubsystemBase implements Loggable {
-  @Log.CameraStream
+  // @Log.CameraStream
   private final PhotonCamera visionCamera = new PhotonCamera("photonvision");
-  @Log.CameraStream
+  // @Log.CameraStream
   private final PhotonCamera driverCamera = new PhotonCamera("driverView");
   /**
    * Creates a new Vision.
