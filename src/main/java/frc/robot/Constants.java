@@ -28,8 +28,8 @@ public final class Constants {
         public static final double kMaxSpeed = 3.0; // meters per second
         public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
         public static final double kTrackWidth = 0.5588; // meters
-        public static final double kWheelRadius = 0.1524; // meters
-        public static final int kEncoderResolution = 5; //CIMcoder has 5 CPR this may need to be adjusted * 10.71 for gearbox
+        public static final double kWheelRadius = 0.0762; // meters
+        public static final int kEncoderResolution = 20; //CIMcoder has 20 CPR this may need to be adjusted * 10.71 for gearbox
         public static final double kSlewSpeedLimit = .3;// Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
         public static final double kSlewRotLimit = .3;  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
     }
