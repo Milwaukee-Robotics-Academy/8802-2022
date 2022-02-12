@@ -1,0 +1,16 @@
+{
+  "SysId": {
+    "Analysis Type": "Drivetrain",
+    "AnalyzerJSONLocation": "C:\\Users\\MRA\\8802-2022\\sysid_data20220203-191602.json",
+    "NetworkTables Settings": {
+      "serverTeam": "8802"
+    },
+    "Program Log": {
+      "window": {
+        "visible": false
+      }
+    },
+    "mode": "Client",
+    "serverTeam": "8802"
+  }
+}
