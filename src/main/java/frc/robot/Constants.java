@@ -49,4 +49,10 @@ public final class Constants {
         public static final int kClimberSolenoid1 = 6;
         public static final int kClimberSolenoid2 = 7;
     }
+    public static final class BlowerConstants{
+        public static final int kLeftMotorFrontPort = 7; //can id
+        public static final int kLeftMotorRearPort = 8; //can id
+        public static final int kRightMotorFrontPort = 9; //can id
+        public static final int kRightMotorRearPort = 10; //can id
+    }
 }
