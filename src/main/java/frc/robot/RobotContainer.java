@@ -6,21 +6,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.AdvanceStorageToShooter;
 import frc.robot.commands.Autonomous;
-import frc.robot.commands.RunStorageWithPhotoeyes;
-import frc.robot.commands.ShooterShoot;
 import frc.robot.commands.SplitArcadeDrive;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Storage;
+
 
 public class RobotContainer {
   private final Drive m_drive = new Drive();
   private final Intake m_intake = new Intake();
-  private final Storage m_storage = new Storage();
-  private final Shooter m_shooter = new Shooter();
+ 
 
 
  // private final PowerDistributionPanel pdp = new PowerDistributionPanel();
@@ -30,24 +25,17 @@ public class RobotContainer {
 
 public RobotContainer() {
 
-  Shuffleboard.getTab("Shooter").add("AdvanceStorageToShooter", new AdvanceStorageToShooter(m_storage));
   Shuffleboard.getTab("Intake").add("intake In", new InstantCommand(m_intake::rotateIn, m_intake));
   Shuffleboard.getTab("Intake").add("intake Out", new InstantCommand(m_intake::rotateOut, m_intake));
   Shuffleboard.getTab("Intake").add("intake Up", new InstantCommand(m_intake::moveUp, m_intake));
   Shuffleboard.getTab("Intake").add("intake Down", new InstantCommand(m_intake::moveDown, m_intake));
   Shuffleboard.getTab("Intake").add("intake Stop", new InstantCommand(m_intake::rotateStop, m_intake));
-  Shuffleboard.getTab("Shooter").add("Stop Shooter", new InstantCommand(m_shooter::stopShooter,m_shooter));
-  Shuffleboard.getTab("Shooter").add("SHOOT!!!", new ShooterShoot(m_shooter,m_storage));
-  Shuffleboard.getTab("Storage").add("Turn In Storage", new InstantCommand(m_storage::turnIn, m_storage));
-  Shuffleboard.getTab("Storage").add("Turn Out Storage", new InstantCommand(m_storage::turnOut, m_storage));
-  Shuffleboard.getTab("Storage").add("Stop Storage", new InstantCommand(m_storage::storageStop, m_storage));  
 
   
   configureButtonBindings();
     m_drive.setDefaultCommand(new SplitArcadeDrive(() -> driverController.getLeftTriggerAxis(),
          () -> driverController.getRightTriggerAxis(), () -> driverController.getLeftX(), m_drive));
     //m_drive.setDefaultCommand(new TankDrive(() -> driverController.getLeftY(), () -> driverController.getRightY(), m_drive));
-    m_storage.setDefaultCommand(new RunStorageWithPhotoeyes(m_storage));
 }
 
 /**
@@ -78,7 +66,6 @@ public void configureButtonBindings() {
   // operatorLeftStick.whenPressed(new InstantCommand(m_shooter::stopShooter));
   // operatorRightStick.whenPressed(new InstantCommand(m_shooter::runShooter));
 
-  driverA.whenHeld(new ShooterShoot(m_shooter,m_storage),true);
 
 }
 

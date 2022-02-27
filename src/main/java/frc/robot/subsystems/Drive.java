@@ -7,13 +7,13 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.Victor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import io.github.oblarg.oblog.Loggable;
@@ -21,26 +21,35 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Drive extends SubsystemBase implements Loggable {
-  private final Victor m_LeftMotor = new Victor(DriveConstants.kLeftMotorFrontPort);
-  private final Victor m_LeftFollowerMotor = new Victor(DriveConstants.kLeftMotorRearPort);
-  private final Victor m_RightMotor = new Victor(DriveConstants.kRightMotorFrontPort);
-  private final Victor m_RightFollowerMotor = new Victor(DriveConstants.kRightMotorRearPort);
-  private final MotorControllerGroup m_LeftMotors = new MotorControllerGroup(m_LeftMotor, m_LeftFollowerMotor);
-  private final MotorControllerGroup m_RightMotors = new MotorControllerGroup(m_RightMotor, m_RightFollowerMotor);
-  private final Encoder m_LeftEncoder = new Encoder(DriveConstants.kLeftEncoder1,DriveConstants.kLeftEncoder2);
-  private final Encoder m_RightEncoder = new Encoder(DriveConstants.kRightEncoder1,DriveConstants.kRightEncoder2);
-
+  private final WPI_TalonFX m_LeftMotor = new WPI_TalonFX(DriveConstants.kLeftMotorFrontPort);
+  private final WPI_TalonFX m_LeftFollowerMotor = new WPI_TalonFX(DriveConstants.kLeftMotorRearPort);
+  private final WPI_TalonFX m_RightMotor = new WPI_TalonFX(DriveConstants.kRightMotorFrontPort);
+  private final WPI_TalonFX m_RightFollowerMotor = new WPI_TalonFX(DriveConstants.kRightMotorRearPort);
   @Log.Gyro
   private final AHRS m_gyroscope = new AHRS(SPI.Port.kMXP);
 
   @Log.DifferentialDrive
-  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_LeftMotors, m_RightMotors);
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_LeftMotor, m_RightMotor);
 
  /**
    * Creates a new drive.
    */
   public Drive() {
-    m_LeftMotors.setInverted(true);
+
+    m_RightMotor.configFactoryDefault();
+    m_RightFollowerMotor.configFactoryDefault();
+    m_LeftMotor.configFactoryDefault();
+    m_LeftFollowerMotor.configFactoryDefault();
+    
+    m_LeftFollowerMotor.follow(m_LeftMotor);
+    m_RightFollowerMotor.follow(m_RightMotor);
+
+    m_RightMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    m_LeftMotor.setInverted(TalonFXInvertType.Clockwise);
+
+    m_RightFollowerMotor.setInverted(InvertType.FollowMaster);
+    m_LeftFollowerMotor.setInverted(InvertType.FollowMaster);
+  
   }
 
   public void drive(double rightThrottle, double leftThrottle, double rotation) {
@@ -82,12 +91,12 @@ public class Drive extends SubsystemBase implements Loggable {
     // This method will be called once per scheduler run
   }
 @Log(name = "Left Encoder")
-  public int getLeftEncoderPosition(){
-    return m_LeftEncoder.get();
+  public Double getLeftEncoderPosition(){
+    return m_LeftMotor.getSelectedSensorPosition();
   }
 
   @Log(name = "Right Encoder")
-  public int getRightEncoderPosition(){
-    return m_RightEncoder.get();
+  public Double getRightEncoderPosition(){
+    return m_RightMotor.getSelectedSensorPosition();
   }
 }
