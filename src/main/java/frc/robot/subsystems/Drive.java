@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,39 +22,42 @@ import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Drive extends SubsystemBase implements Loggable {
-  private final WPI_TalonFX m_LeftMotor = new WPI_TalonFX(DriveConstants.kLeftMotorFrontPort);
-  private final WPI_TalonFX m_LeftFollowerMotor = new WPI_TalonFX(DriveConstants.kLeftMotorRearPort);
-  private final WPI_TalonFX m_RightMotor = new WPI_TalonFX(DriveConstants.kRightMotorFrontPort);
-  private final WPI_TalonFX m_RightFollowerMotor = new WPI_TalonFX(DriveConstants.kRightMotorRearPort);
+  private final WPI_TalonFX m_leftMotor = new WPI_TalonFX(DriveConstants.kLeftMotorFrontPort);
+  private final WPI_TalonFX m_leftFollowerMotor = new WPI_TalonFX(DriveConstants.kLeftMotorRearPort);
+  private final WPI_TalonFX m_rightMotor = new WPI_TalonFX(DriveConstants.kRightMotorFrontPort);
+  private final WPI_TalonFX m_rightFollowerMotor = new WPI_TalonFX(DriveConstants.kRightMotorRearPort);
+  private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(.5);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(.5);
+  
   @Log.Gyro
-  private final AHRS m_gyroscope = new AHRS(SPI.Port.kMXP);
+  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   @Log.DifferentialDrive
-  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_LeftMotor, m_RightMotor);
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
 
  /**
    * Creates a new drive.
    */
   public Drive() {
 
-    m_RightMotor.configFactoryDefault();
-    m_RightFollowerMotor.configFactoryDefault();
-    m_LeftMotor.configFactoryDefault();
-    m_LeftFollowerMotor.configFactoryDefault();
+    m_rightMotor.configFactoryDefault();
+    m_rightFollowerMotor.configFactoryDefault();
+    m_leftMotor.configFactoryDefault();
+    m_leftFollowerMotor.configFactoryDefault();
     
-    m_LeftFollowerMotor.follow(m_LeftMotor);
-    m_RightFollowerMotor.follow(m_RightMotor);
+    m_leftFollowerMotor.follow(m_leftMotor);
+    m_rightFollowerMotor.follow(m_rightMotor);
 
-    m_RightMotor.setInverted(TalonFXInvertType.CounterClockwise);
-    m_LeftMotor.setInverted(TalonFXInvertType.Clockwise);
+    m_rightMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    m_leftMotor.setInverted(TalonFXInvertType.Clockwise);
 
-    m_RightFollowerMotor.setInverted(InvertType.FollowMaster);
-    m_LeftFollowerMotor.setInverted(InvertType.FollowMaster);
+    m_rightFollowerMotor.setInverted(InvertType.FollowMaster);
+    m_leftFollowerMotor.setInverted(InvertType.FollowMaster);
   
   }
 
   public void drive(double rightThrottle, double leftThrottle, double rotation) {
-     m_robotDrive.arcadeDrive(this.deadband(rightThrottle - leftThrottle), this.deadband(-rotation));
+     m_robotDrive.arcadeDrive(m_accLimiter.calculate(rightThrottle - leftThrottle), m_rotLimiter.calculate(-rotation));
     }
     public double deadband(double value){
       //Upper Deadband//
@@ -78,8 +82,8 @@ public class Drive extends SubsystemBase implements Loggable {
 
   @Config
   public void tank(double left, double right){
-    m_LeftMotor.set(left);
-    m_RightMotor.set(right);
+    m_leftMotor.set(left);
+    m_rightMotor.set(right);
   }
   
   public void stopDrive(){
@@ -92,11 +96,11 @@ public class Drive extends SubsystemBase implements Loggable {
   }
 @Log(name = "Left Encoder")
   public Double getLeftEncoderPosition(){
-    return m_LeftMotor.getSelectedSensorPosition();
+    return m_leftMotor.getSelectedSensorPosition();
   }
 
   @Log(name = "Right Encoder")
   public Double getRightEncoderPosition(){
-    return m_RightMotor.getSelectedSensorPosition();
+    return m_rightMotor.getSelectedSensorPosition();
   }
 }
