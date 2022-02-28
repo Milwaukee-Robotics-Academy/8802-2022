@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,7 +24,7 @@ public class RobotContainer {
   private final XboxController driverController = new XboxController(0);
 //  private final XboxController operatorController = new XboxController(1);
   private final CommandBase m_autonomousCommand = new Autonomous(m_drive).withTimeout(5);
-
+  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 public RobotContainer() {
 
   Shuffleboard.getTab("Intake").add("intake In", new InstantCommand(m_intake::rotateIn, m_intake));
@@ -31,10 +33,16 @@ public RobotContainer() {
   Shuffleboard.getTab("Intake").add("intake Down", new InstantCommand(m_intake::moveDown, m_intake));
   Shuffleboard.getTab("Intake").add("intake Stop", new InstantCommand(m_intake::rotateStop, m_intake));
 
-  
+
   configureButtonBindings();
     m_drive.setDefaultCommand(new SplitArcadeDrive(() -> driverController.getLeftTriggerAxis(),
          () -> driverController.getRightTriggerAxis(), () -> driverController.getLeftX(), m_drive));
+         // Add commands to the autonomous command chooser
+    m_autoChooser.setDefaultOption("Simple Auto",m_autonomousCommand);
+    m_autoChooser.addOption("Drive Back", new InstantCommand(()-> m_drive.drive(-.6,0,0)).withTimeout(5));
+
+// Put the chooser on the dashboard
+  SmartDashboard.putData(m_autoChooser);
     //m_drive.setDefaultCommand(new TankDrive(() -> driverController.getLeftY(), () -> driverController.getRightY(), m_drive));
 }
 
@@ -81,7 +89,7 @@ public void shuffleBoard(){
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_autonomousCommand;
+    return m_autoChooser.getSelected();
   }
 
 }
