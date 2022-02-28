@@ -72,6 +72,8 @@ public class Drive extends SubsystemBase implements Loggable {
       m_robotDrive.arcadeDrive(m_accLimiter.calculate(rightThrottle - leftThrottle), -rotation+Math.sin( rollAngleDegrees * (Math.PI / 180.0)) * -1);
     } else {}
      m_robotDrive.arcadeDrive(m_accLimiter.calculate(rightThrottle - leftThrottle), m_rotLimiter.calculate(-rotation));
+     SmartDashboard.putNumber("TiltCorrection", +Math.sin( rollAngleDegrees * (Math.PI / 180.0)) * -1);
+     SmartDashboard.putNumber("Tilt",rollAngleDegrees);
     }
     public double deadband(double value){
       //Upper Deadband//
