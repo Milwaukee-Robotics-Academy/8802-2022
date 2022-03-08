@@ -7,18 +7,18 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import io.github.oblarg.oblog.Loggable;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import static frc.robot.Constants.ClimberConstants;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClimberConstants;
+import io.github.oblarg.oblog.Loggable;
 
 public class Climber extends SubsystemBase implements Loggable {
   /**
    * Creates a new Climber.
    */
-  // static Spark climberLeft = new Spark(ClimberConstants.kClimberMotorLeft);
-  // static Spark climberRight = new Spark(ClimberConstants.kClimberMotorRight);
+  private final WPI_TalonFX m_leftMotor = new WPI_TalonFX(ClimberConstants.kClimberMotorLeft);
+  private final WPI_TalonFX m_rightMotor = new WPI_TalonFX(ClimberConstants.kClimberMotorRight);
 
   public Climber() {
 
