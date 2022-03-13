@@ -18,20 +18,10 @@ import io.github.oblarg.oblog.annotations.Log;
 public class Blower extends SubsystemBase implements Loggable {
 
   private Spark m_leftMotor =new Spark(BlowerConstants.kLeftMotorPort);
+  private Spark m_rightMotor =new Spark(BlowerConstants.kRightMotorPort);
 
   /** Creates a new Blower. */
   public Blower() {
-   // m_leftMotor.restoreFactoryDefaults();
-    // m_leftRearMotor.restoreFactoryDefaults();
-    // m_rightMotor.restoreFactoryDefaults();
-    // m_rightRearMotor.restoreFactoryDefaults();
-  //  m_leftRearMotor.follow(m_leftMotor,true);
-    m_leftMotor.setInverted(false);
-    // m_leftRearMotor.setInverted(true);
-    // m_rightRearMotor.follow(m_rightMotor,true);
-    // m_rightMotor.setInverted(false);
-//    m_rightRearMotor.setInverted(true);
-
 
   }
 
@@ -40,12 +30,12 @@ public class Blower extends SubsystemBase implements Loggable {
     // This method will be called once per scheduler run
   }
   public void blow(){
-    m_leftMotor.set(.2);
-  //  m_rightMotor.set(.2);
+    m_leftMotor.set(1);
+    m_rightMotor.set(1);
   }
 
   public void stop(){
     m_leftMotor.set(0);
-  //  m_rightMotor.set(0);
+    m_rightMotor.set(0);
   }
 }
