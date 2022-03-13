@@ -101,10 +101,6 @@ public class Drive extends SubsystemBase implements Loggable {
       return 0;
     }
 
-  public void driveTank(double d, double e){
-    m_robotDrive.tankDrive(d, e);
-  }
-
   public void vision() {
 
   }
@@ -124,12 +120,24 @@ public class Drive extends SubsystemBase implements Loggable {
     // This method will be called once per scheduler run
   }
 @Log(name = "Left Encoder")
-  public Double getLeftEncoderPosition(){
+  public double getLeftEncoderPosition(){
     return m_leftMotor.getSelectedSensorPosition();
   }
 
   @Log(name = "Right Encoder")
-  public Double getRightEncoderPosition(){
+  public double getRightEncoderPosition(){
     return m_rightMotor.getSelectedSensorPosition();
+  }
+
+  public double getAveragePosition() {
+    return (m_rightMotor.getSelectedSensorPosition()+m_leftMotor.getSelectedSensorPosition())/2;
+  }
+
+  public double getUnitsPerMeter() {
+    return (2048*10.71)/(.1524*Math.PI);
+  }
+
+  public double getHeading(){
+    return m_gyro.getAngle();
   }
 }

@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autonomous;
+import frc.robot.commands.DriveStraight;
 import frc.robot.commands.SplitArcadeDrive;
+import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -19,29 +21,27 @@ public class RobotContainer {
   private final Drive m_drive = new Drive();
   private final Intake m_intake = new Intake();
   private final Blower m_blower = new Blower();
- 
-
-
- // private final PowerDistributionPanel pdp = new PowerDistributionPanel();
   private final XboxController driverController = new XboxController(0);
-//  private final XboxController operatorController = new XboxController(1);
+  private final XboxController operatorController = new XboxController(1);
+
   private final CommandBase m_autonomousCommand = new Autonomous(m_drive).withTimeout(5);
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  SendableChooser<Command> m_DriveChooser = new SendableChooser<>();
+
 public RobotContainer() {
 
-  Shuffleboard.getTab("Intake").add("intake In", new InstantCommand(m_intake::rotateIn, m_intake));
-  Shuffleboard.getTab("Intake").add("intake Out", new InstantCommand(m_intake::rotateOut, m_intake));
-  Shuffleboard.getTab("Intake").add("intake Up", new InstantCommand(m_intake::moveUp, m_intake));
-  Shuffleboard.getTab("Intake").add("intake Down", new InstantCommand(m_intake::moveDown, m_intake));
-  Shuffleboard.getTab("Intake").add("intake Stop", new InstantCommand(m_intake::rotateStop, m_intake));
+  // Shuffleboard.getTab("Intake").add("intake In", new InstantCommand(m_intake::rotateIn, m_intake));
+  // Shuffleboard.getTab("Intake").add("intake Out", new InstantCommand(m_intake::rotateOut, m_intake));
+  // Shuffleboard.getTab("Intake").add("intake Up", new InstantCommand(m_intake::moveUp, m_intake));
+  // Shuffleboard.getTab("Intake").add("intake Down", new InstantCommand(m_intake::moveDown, m_intake));
+  // Shuffleboard.getTab("Intake").add("intake Stop", new InstantCommand(m_intake::rotateStop, m_intake));
 
 
   configureButtonBindings();
     m_drive.setDefaultCommand(new SplitArcadeDrive(() -> driverController.getLeftTriggerAxis(),
          () -> driverController.getRightTriggerAxis(), () -> driverController.getLeftX(), m_drive));
          // Add commands to the autonomous command chooser
-    m_autoChooser.setDefaultOption("Simple Auto",m_autonomousCommand);
-    m_autoChooser.addOption("Drive Back", new InstantCommand(()-> m_drive.drive(-.6,0,0)).withTimeout(5));
+
 
 // Put the chooser on the dashboard
   SmartDashboard.putData(m_autoChooser);
@@ -82,7 +82,12 @@ public void configureButtonBindings() {
 
 public void shuffleBoard(){
 //SmartDashboard.putBoolean("intakeInput", m_storage.isBallAtIntake());
-
+m_autoChooser.setDefaultOption("reverse",new InstantCommand(()-> m_drive.drive(-.6,0,0)).withTimeout(5));
+m_autoChooser.addOption("Blow.Reverse", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(1.4).andThen(
+  new DriveStraight(-.6,1.5,m_drive).withTimeout(5)));
+m_autoChooser.addOption("Blow.Turn.Blow.Reverse", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(1.4).andThen(
+  new TurnToAngle(25,m_drive).withTimeout(3).andThen(
+    new DriveStraight(-.6,1.5,m_drive).withTimeout(5))));
 
 }
 
