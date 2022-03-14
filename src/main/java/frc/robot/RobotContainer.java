@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.SplitArcadeDrive;
 import frc.robot.subsystems.Blower;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 
@@ -18,8 +19,8 @@ import frc.robot.subsystems.Intake;
 public class RobotContainer {
   private final Drive m_drive = new Drive();
   private final Intake m_intake = new Intake();
-  private final Blower m_blower = new Blower();
- 
+//  private final Blower m_blower = new Blower();
+  private final Climber m_climber = new Climber();
 
 
  // private final PowerDistributionPanel pdp = new PowerDistributionPanel();
@@ -37,8 +38,8 @@ public RobotContainer() {
 
 
   configureButtonBindings();
-    m_drive.setDefaultCommand(new SplitArcadeDrive(() -> driverController.getLeftTriggerAxis(),
-         () -> driverController.getRightTriggerAxis(), () -> driverController.getLeftX(), m_drive));
+    m_drive.setDefaultCommand(new SplitArcadeDrive(driverController::getLeftTriggerAxis,
+         driverController::getRightTriggerAxis, driverController::getLeftX, m_drive));
          // Add commands to the autonomous command chooser
     m_autoChooser.setDefaultOption("Simple Auto",m_autonomousCommand);
     m_autoChooser.addOption("Drive Back", new InstantCommand(()-> m_drive.drive(-.6,0,0)).withTimeout(5));
@@ -63,8 +64,8 @@ public void configureButtonBindings() {
   // final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
   // final JoystickButton operatorLeftStick = new JoystickButton(operatorController, XboxController.Button.kLeftStick.value);
   // final JoystickButton operatorRightStick = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);
-  driverA.whenPressed(new InstantCommand(m_blower::blow, m_blower));
-  driverB.whenPressed(new InstantCommand(m_blower::stop, m_blower));
+ // driverA.whenPressed(new InstantCommand(m_blower::blow, m_blower));
+ // driverB.whenPressed(new InstantCommand(m_blower::stop, m_blower));
   // operatorX.whenPressed(new InstantCommand(m_intake::rotateStop, m_intake));
   // operatorX.whenReleased(new InstantCommand(m_intake::rotateStop, m_intake));
 
@@ -76,9 +77,13 @@ public void configureButtonBindings() {
 
   // operatorLeftStick.whenPressed(new InstantCommand(m_shooter::stopShooter));
   // operatorRightStick.whenPressed(new InstantCommand(m_shooter::runShooter));
-
-
-}
+  final JoystickButton driverStart = new JoystickButton(driverController, XboxController.Button.kStart.value);
+  final JoystickButton driverBack = new JoystickButton(driverController, XboxController.Button.kBack.value);
+  driverStart.whenPressed(new InstantCommand(m_climber::extend, m_climber))
+    .whenReleased(new InstantCommand(m_climber::stop, m_climber));
+  driverBack.whenPressed(new InstantCommand(m_climber::unextend, m_climber))
+    .whenReleased(new InstantCommand(m_climber::stop, m_climber));
+ }
 
 public void shuffleBoard(){
 //SmartDashboard.putBoolean("intakeInput", m_storage.isBallAtIntake());

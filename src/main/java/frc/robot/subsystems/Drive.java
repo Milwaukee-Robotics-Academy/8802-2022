@@ -31,7 +31,7 @@ public class Drive extends SubsystemBase implements Loggable {
   private final WPI_TalonFX m_rightMotor = new WPI_TalonFX(DriveConstants.kRightMotorFrontPort);
   private final WPI_TalonFX m_rightFollowerMotor = new WPI_TalonFX(DriveConstants.kRightMotorRearPort);
   SendableChooser<Boolean> m_preventTilt = new SendableChooser<>();
-  private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(.7);
+  private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(1.5);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(1.2);
   
   @Log.Gyro
@@ -49,11 +49,11 @@ public class Drive extends SubsystemBase implements Loggable {
     m_rightFollowerMotor.configFactoryDefault();
     m_leftMotor.configFactoryDefault();
     m_leftFollowerMotor.configFactoryDefault();
-    m_rightMotor.configOpenloopRamp(.25);
+    m_rightMotor.configOpenloopRamp(.75);
     m_rightMotor.setNeutralMode(NeutralMode.Brake);
-    m_rightFollowerMotor.configOpenloopRamp(.25);
-    m_leftFollowerMotor.configOpenloopRamp(.25);
-    m_leftMotor.configOpenloopRamp(.25);
+    m_rightFollowerMotor.configOpenloopRamp(.75);
+    m_leftFollowerMotor.configOpenloopRamp(.75);
+    m_leftMotor.configOpenloopRamp(.75);
     m_rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
     m_leftFollowerMotor.setNeutralMode(NeutralMode.Brake);
     m_leftMotor.setNeutralMode(NeutralMode.Brake);
@@ -80,7 +80,8 @@ public class Drive extends SubsystemBase implements Loggable {
 
    // if (m_preventTilt.getSelected() && Math.abs(rollAngleDegrees) > 10) {
       //alter based on tilt
-      m_robotDrive.arcadeDrive(m_accLimiter.calculate((rightThrottle - leftThrottle)), m_rotLimiter.calculate(-rotation));
+     // m_robotDrive.arcadeDrive(m_accLimiter.calculate((rightThrottle - leftThrottle)), m_rotLimiter.calculate(-rotation));
+      m_robotDrive.arcadeDrive((rightThrottle - leftThrottle), -rotation*.75);
     // } else {}
     //  m_robotDrive.arcadeDrive(m_accLimiter.calculate(rightThrottle - leftThrottle), m_rotLimiter.calculate(-rotation));
     //  SmartDashboard.putNumber("TiltCorrection", +Math.sin( rollAngleDegrees * (Math.PI / 180.0)) * -1);
