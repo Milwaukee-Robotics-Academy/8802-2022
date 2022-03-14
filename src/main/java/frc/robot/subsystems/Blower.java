@@ -15,7 +15,7 @@ import io.github.oblarg.oblog.Loggable;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Blower extends SubsystemBase implements Loggable {
-  @Log.MotorController
+
   private CANSparkMax m_leftMotor =new CANSparkMax(BlowerConstants.kLeftMotorFrontPort, MotorType.kBrushless);
   // private CANSparkMax m_rightMotor = new CANSparkMax(BlowerConstants.kRightMotorFrontPort, MotorType.kBrushless);
   // private CANSparkMax m_leftRearMotor = new CANSparkMax(BlowerConstants.kLeftMotorRearPort, MotorType.kBrushless);
