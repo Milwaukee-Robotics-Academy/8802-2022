@@ -13,6 +13,7 @@ import frc.robot.commands.DriveStraight;
 import frc.robot.commands.SplitArcadeDrive;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Blower;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 
@@ -29,8 +30,8 @@ public RobotContainer() {
 
   shuffleBoard();
   configureButtonBindings();
-    m_drive.setDefaultCommand(new SplitArcadeDrive(() -> driverController.getLeftTriggerAxis(),
-         () -> driverController.getRightTriggerAxis(), () -> driverController.getLeftX(), m_drive));
+    m_drive.setDefaultCommand(new SplitArcadeDrive(driverController::getLeftTriggerAxis,
+         driverController::getRightTriggerAxis, driverController::getLeftX, m_drive));
          // Add commands to the autonomous command chooser
 
 
@@ -64,9 +65,13 @@ public void configureButtonBindings() {
   // operatorStartButton.whenReleased(new InstantCommand(m_storage::storageStop));
   // operatorLeftStick.whenPressed(new InstantCommand(m_shooter::stopShooter));
   // operatorRightStick.whenPressed(new InstantCommand(m_shooter::runShooter));
-
-
-}
+  final JoystickButton driverStart = new JoystickButton(driverController, XboxController.Button.kStart.value);
+  final JoystickButton driverBack = new JoystickButton(driverController, XboxController.Button.kBack.value);
+  driverStart.whenPressed(new InstantCommand(m_climber::extend, m_climber))
+    .whenReleased(new InstantCommand(m_climber::stop, m_climber));
+  driverBack.whenPressed(new InstantCommand(m_climber::unextend, m_climber))
+    .whenReleased(new InstantCommand(m_climber::stop, m_climber));
+ }
 
 public void shuffleBoard(){
 // Put the chooser on the dashboard

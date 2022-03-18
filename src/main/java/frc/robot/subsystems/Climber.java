@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,18 +22,34 @@ public class Climber extends SubsystemBase implements Loggable {
   private final WPI_TalonFX m_leftMotor = new WPI_TalonFX(ClimberConstants.kClimberMotorLeft);
   private final WPI_TalonFX m_rightMotor = new WPI_TalonFX(ClimberConstants.kClimberMotorRight);
 
-  public Climber() {
+  private static final double DRIVE_SPEED = 0.5;
 
-}
-/**
- * This elongates the elevator to hook onto the bar
- */
-public void extend() {
+  public Climber() {
+    m_leftMotor.configFactoryDefault();
+    m_rightMotor.configFactoryDefault();
+    m_rightMotor.setInverted(TalonFXInvertType.CounterClockwise);
+    m_leftMotor.setInverted(TalonFXInvertType.Clockwise);
+    m_leftMotor.setNeutralMode(NeutralMode.Brake);
+    m_rightMotor.setNeutralMode(NeutralMode.Brake);    
+  }
+  /**
+   * This elongates the elevator to hook onto the bar
+   */
+  public void extend() {
+    m_leftMotor.set(DRIVE_SPEED);
+    m_rightMotor.set(DRIVE_SPEED);
   }
   
+  public void stop()
+  {
+    m_leftMotor.set(0);
+    m_rightMotor.set(0);
+  }
   /**
    * This shrinks the elevator to lift the robot
    */
   public void unextend() {
-   }
+    m_leftMotor.set(-DRIVE_SPEED);
+    m_rightMotor.set(-DRIVE_SPEED);
+  }
 }

@@ -49,11 +49,12 @@ public class Drive extends SubsystemBase implements Loggable {
     m_rightFollowerMotor.configFactoryDefault();
     m_leftMotor.configFactoryDefault();
     m_leftFollowerMotor.configFactoryDefault();
-    m_rightMotor.configOpenloopRamp(.2);
+    m_rightMotor.configOpenloopRamp(.75);
     m_rightMotor.setNeutralMode(NeutralMode.Brake);
-    m_rightFollowerMotor.configOpenloopRamp(.2);
-    m_leftFollowerMotor.configOpenloopRamp(.2);
-    m_leftMotor.configOpenloopRamp(.2);
+    m_rightFollowerMotor.configOpenloopRamp(.75);
+    m_leftFollowerMotor.configOpenloopRamp(.75);
+    m_leftMotor.configOpenloopRamp(.75);
+
     m_rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
     m_leftFollowerMotor.setNeutralMode(NeutralMode.Brake);
     m_leftMotor.setNeutralMode(NeutralMode.Brake);
@@ -80,8 +81,8 @@ public class Drive extends SubsystemBase implements Loggable {
 
    // if (m_preventTilt.getSelected() && Math.abs(rollAngleDegrees) > 10) {
       //alter based on tilt
-   //   m_robotDrive.arcadeDrive(m_accLimiter.calculate((rightThrottle - leftThrottle)), m_rotLimiter.calculate(-rotation));
-      m_robotDrive.arcadeDrive(m_accLimiter.calculate((rightThrottle - leftThrottle)), -rotation*.8);
+     // m_robotDrive.arcadeDrive(m_accLimiter.calculate((rightThrottle - leftThrottle)), m_rotLimiter.calculate(-rotation));
+      m_robotDrive.arcadeDrive((rightThrottle - leftThrottle), -rotation*.75);
 
     // } else {}
     //  m_robotDrive.arcadeDrive(m_accLimiter.calculate(rightThrottle - leftThrottle), m_rotLimiter.calculate(-rotation));
