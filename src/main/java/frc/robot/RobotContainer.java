@@ -19,7 +19,7 @@ import frc.robot.subsystems.Intake;
 public class RobotContainer {
   private final Drive m_drive = new Drive();
   private final Intake m_intake = new Intake();
-//  private final Blower m_blower = new Blower();
+  private final Blower m_blower = new Blower();
   private final Climber m_climber = new Climber();
 
 
@@ -64,8 +64,8 @@ public void configureButtonBindings() {
   // final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
   // final JoystickButton operatorLeftStick = new JoystickButton(operatorController, XboxController.Button.kLeftStick.value);
   // final JoystickButton operatorRightStick = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);
- // driverA.whenPressed(new InstantCommand(m_blower::blow, m_blower));
- // driverB.whenPressed(new InstantCommand(m_blower::stop, m_blower));
+ driverA.whenPressed(new InstantCommand(m_blower::blow, m_blower));
+ driverB.whenPressed(new InstantCommand(m_blower::stop, m_blower));
   // operatorX.whenPressed(new InstantCommand(m_intake::rotateStop, m_intake));
   // operatorX.whenReleased(new InstantCommand(m_intake::rotateStop, m_intake));
 
