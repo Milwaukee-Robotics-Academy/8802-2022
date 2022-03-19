@@ -13,8 +13,6 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,13 +29,8 @@ public class Drive extends SubsystemBase implements Loggable {
   private final WPI_TalonFX m_rightMotor = new WPI_TalonFX(DriveConstants.kRightMotorFrontPort);
   private final WPI_TalonFX m_rightFollowerMotor = new WPI_TalonFX(DriveConstants.kRightMotorRearPort);
   SendableChooser<Boolean> m_preventTilt = new SendableChooser<>();
-<<<<<<< HEAD
-  private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(1.5);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(1.2);
-=======
-  private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(.9);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2);
->>>>>>> 137907091e0e79d987931d53a19ff5b5a606a377
+  // private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(.9);
+  // private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2);
   
   @Log.Gyro
   private final AHRS m_gyro = new AHRS(SerialPort.Port.kUSB1);
@@ -54,19 +47,11 @@ public class Drive extends SubsystemBase implements Loggable {
     m_rightFollowerMotor.configFactoryDefault();
     m_leftMotor.configFactoryDefault();
     m_leftFollowerMotor.configFactoryDefault();
-<<<<<<< HEAD
     m_rightMotor.configOpenloopRamp(.75);
     m_rightMotor.setNeutralMode(NeutralMode.Brake);
     m_rightFollowerMotor.configOpenloopRamp(.75);
     m_leftFollowerMotor.configOpenloopRamp(.75);
     m_leftMotor.configOpenloopRamp(.75);
-=======
-    m_rightMotor.configOpenloopRamp(.2);
-    m_rightMotor.setNeutralMode(NeutralMode.Brake);
-    m_rightFollowerMotor.configOpenloopRamp(.2);
-    m_leftFollowerMotor.configOpenloopRamp(.2);
-    m_leftMotor.configOpenloopRamp(.2);
->>>>>>> 137907091e0e79d987931d53a19ff5b5a606a377
     m_rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
     m_leftFollowerMotor.setNeutralMode(NeutralMode.Brake);
     m_leftMotor.setNeutralMode(NeutralMode.Brake);
@@ -89,7 +74,7 @@ public class Drive extends SubsystemBase implements Loggable {
   }
 
   public void drive(double rightThrottle, double leftThrottle, double rotation) {
-    double rollAngleDegrees     = m_gyro.getRoll();
+  //  double rollAngleDegrees     = m_gyro.getRoll();
 
    // if (m_preventTilt.getSelected() && Math.abs(rollAngleDegrees) > 10) {
       //alter based on tilt
