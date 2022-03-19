@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -17,11 +18,19 @@ import io.github.oblarg.oblog.annotations.Log;
 
 public class Blower extends SubsystemBase implements Loggable {
 
-  private Spark m_leftMotor =new Spark(BlowerConstants.kLeftMotorPort);
-  private Spark m_rightMotor =new Spark(BlowerConstants.kRightMotorPort);
+  // private CANSparkMax m_leftMotor =new CANSparkMax(BlowerConstants.kLeftMotorFrontPort, MotorType.kBrushless);
+  // private CANSparkMax m_leftRearMotor =new CANSparkMax(BlowerConstants.kLeftMotorFrontPort, MotorType.kBrushless);
+  private WPI_VictorSPX m_rightMotor = new WPI_VictorSPX(BlowerConstants.kRightMotorPort);
+
 
   /** Creates a new Blower. */
   public Blower() {
+    // m_leftMotor.restoreFactoryDefaults();
+    // m_leftRearMotor.restoreFactoryDefaults();
+    // m_leftRearMotor.follow(m_leftMotor,true);
+    // m_leftMotor.setInverted(false);
+    // m_leftMotor.clearFaults();
+    // m_leftRearMotor.clearFaults();
 
   }
 
@@ -30,12 +39,12 @@ public class Blower extends SubsystemBase implements Loggable {
     // This method will be called once per scheduler run
   }
   public void blow(){
-    m_leftMotor.set(1);
+    // m_leftMotor.set(.2);
     m_rightMotor.set(1);
   }
 
   public void stop(){
-    m_leftMotor.set(0);
+    // m_leftMotor.set(0);
     m_rightMotor.set(0);
   }
 }

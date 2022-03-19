@@ -21,6 +21,7 @@ import frc.robot.subsystems.Intake;
 public class RobotContainer {
   private final Drive m_drive = new Drive();
   private final Blower m_blower = new Blower();
+  private final Climber m_climber = new Climber();
   private final XboxController driverController = new XboxController(0);
   private final XboxController operatorController = new XboxController(1);
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();

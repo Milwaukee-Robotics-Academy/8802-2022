@@ -41,8 +41,10 @@ public final class Constants {
         public static final int kClimberMotorRight = 6; //can
     }
     public static final class BlowerConstants{
-        public static final int kLeftMotorPort = 1; //PWM id
-        public static final int kRightMotorPort = 2; //PWM id
+
+        public static final int kLeftMotorFrontPort = 34; //can id
+        public static final int kLeftMotorRearPort = 24; //can id
+        public static final int kRightMotorPort = 8; //can id
 
     }
 }
