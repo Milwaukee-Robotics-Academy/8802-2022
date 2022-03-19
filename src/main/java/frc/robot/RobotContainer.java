@@ -47,8 +47,8 @@ public void configureButtonBindings() {
 
   final JoystickButton driverA = new JoystickButton(driverController, XboxController.Button.kA.value);
   final JoystickButton driverB = new JoystickButton(driverController, XboxController.Button.kB.value);
-  // final JoystickButton operatorA = new JoystickButton(operatorController, XboxController.Button.kA.value);
-  // final JoystickButton operatorB = new JoystickButton(operatorController, XboxController.Button.kB.value);
+  final JoystickButton operatorA = new JoystickButton(operatorController, XboxController.Button.kA.value);
+  final JoystickButton operatorB = new JoystickButton(operatorController, XboxController.Button.kB.value);
   // final JoystickButton operatorX = new JoystickButton(operatorController, XboxController.Button.kX.value);
   // final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
   // final JoystickButton oepratorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
@@ -56,8 +56,8 @@ public void configureButtonBindings() {
   // final JoystickButton operatorLeftStick = new JoystickButton(operatorController, XboxController.Button.kLeftStick.value);
   // final JoystickButton operatorRightStick = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);
   
-  driverA.whenPressed(new InstantCommand(m_blower::blow, m_blower));
-  driverB.whenPressed(new InstantCommand(m_blower::stop, m_blower));
+  operatorA.whenPressed(new InstantCommand(m_blower::blow, m_blower));
+  OperatorB.whenPressed(new InstantCommand(m_blower::stop, m_blower));
   // operatorX.whenPressed(new InstantCommand(m_intake::rotateStop, m_intake));
   // operatorX.whenReleased(new InstantCommand(m_intake::rotateStop, m_intake));
   // operatorRightBumper.whenPressed(new InstantCommand(m_intake::moveUp, m_intake));
@@ -66,18 +66,18 @@ public void configureButtonBindings() {
   // operatorStartButton.whenReleased(new InstantCommand(m_storage::storageStop));
   // operatorLeftStick.whenPressed(new InstantCommand(m_shooter::stopShooter));
   // operatorRightStick.whenPressed(new InstantCommand(m_shooter::runShooter));
-  final JoystickButton driverStart = new JoystickButton(driverController, XboxController.Button.kStart.value);
-  final JoystickButton driverBack = new JoystickButton(driverController, XboxController.Button.kBack.value);
-  driverStart.whenPressed(new InstantCommand(m_climber::extend, m_climber))
+  final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
+  final JoystickButton operatorRightBumper = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
+  operatorLeftBumper.whenPressed(new InstantCommand(m_climber::extend, m_climber))
     .whenReleased(new InstantCommand(m_climber::stop, m_climber));
-  driverBack.whenPressed(new InstantCommand(m_climber::unextend, m_climber))
+  operatorRightBumper.whenPressed(new InstantCommand(m_climber::unextend, m_climber))
     .whenReleased(new InstantCommand(m_climber::stop, m_climber));
  }
 
 public void shuffleBoard(){
 // Put the chooser on the dashboard
 SmartDashboard.putData(m_autoChooser);
-m_autoChooser.setDefaultOption("reverse",new InstantCommand(()-> m_drive.drive(-.6,0,0)).withTimeout(5));
+m_autoChooser.setDefaultOption("reverse",new InstantCommand(()-> m_drive.drive(0,0,0)).withTimeout(5));
 m_autoChooser.addOption("Blow.Reverse", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(1.4).andThen(
   new DriveStraight(-.6,1.5,m_drive).withTimeout(5)));
 m_autoChooser.addOption("Blow.Turn.Blow.Reverse", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(1.4).andThen(
