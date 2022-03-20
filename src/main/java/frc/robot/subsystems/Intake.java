@@ -17,9 +17,6 @@ public class Intake extends SubsystemBase implements Loggable {
   /**
    * Creates a new Intake.
    */
-  private final Spark intake = new Spark(IntakeConstants.kIntakeMotor);
-
- 
    public Intake() {
 
   }
@@ -44,7 +41,7 @@ public class Intake extends SubsystemBase implements Loggable {
    * This moves the motors so the ball goes into the robot at full speed
    */
   public void rotateIn() {
-    intake.set(-.45);
+
   }
 
   /**
@@ -52,20 +49,20 @@ public class Intake extends SubsystemBase implements Loggable {
    */
   @Config
   public void rotate(int speed) {
-    intake.set(-speed);
+
   }
 
   /**
    * This moves the motors so the ball goes out of the robot at full speed
    */
   public void rotateOut() {
-    intake.set(.6);
+
   }
 
   /**
    * This stops the motors from moving
    */
   public void rotateStop () {
-    intake.stopMotor();
+
   }
 }
