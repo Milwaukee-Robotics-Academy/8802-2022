@@ -105,13 +105,15 @@ SmartDashboard.putData(m_autoChooser);
      m_drive.setBrake(false);
   }
   public void disabledPeriodic(){
-
+    m_drive.setBrake(false);
   }
 
   public void robotInit(){
-    m_drive.setBrake(false);
+    m_drive.setBrake(true);
   }
   public void robotPeriodic(){
-  
+  }
+  public void teleopInit(){
+    m_drive.setBrake(true);
   }
 }

@@ -30,6 +30,7 @@ public class Drive extends SubsystemBase implements Loggable {
   private final WPI_TalonFX m_leftFollowerMotor = new WPI_TalonFX(DriveConstants.kLeftMotorRearPort);
   private final WPI_TalonFX m_rightMotor = new WPI_TalonFX(DriveConstants.kRightMotorFrontPort);
   private final WPI_TalonFX m_rightFollowerMotor = new WPI_TalonFX(DriveConstants.kRightMotorRearPort);
+  private final String c = "";
   SendableChooser<Boolean> m_preventTilt = new SendableChooser<>();
   private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(.9);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2);
@@ -59,7 +60,7 @@ public class Drive extends SubsystemBase implements Loggable {
     m_rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
     m_leftFollowerMotor.setNeutralMode(NeutralMode.Brake);
     m_leftMotor.setNeutralMode(NeutralMode.Brake);
-  
+    
     
     m_leftFollowerMotor.follow(m_leftMotor);
     m_rightFollowerMotor.follow(m_rightMotor);
@@ -145,17 +146,17 @@ public class Drive extends SubsystemBase implements Loggable {
     return m_gyro.getAngle();
   }
   public void setBrake(boolean brake){
-  //   if (brake){
-  //   m_rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
-  //   m_leftFollowerMotor.setNeutralMode(NeutralMode.Brake);  
-  //   m_rightMotor.setNeutralMode(NeutralMode.Brake);
-  //   m_leftMotor.setNeutralMode(NeutralMode.Brake);
-  // } else {
-  //   m_rightFollowerMotor.setNeutralMode(NeutralMode.Coast);
-  //   m_leftFollowerMotor.setNeutralMode(NeutralMode.Coast);  
-  //   m_rightMotor.setNeutralMode(NeutralMode.Coast);
-  //   m_leftMotor.setNeutralMode(NeutralMode.Coast);
-  // }
+  if (brake){
+    m_rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
+    m_leftFollowerMotor.setNeutralMode(NeutralMode.Brake);  
+    m_rightMotor.setNeutralMode(NeutralMode.Brake);
+    m_leftMotor.setNeutralMode(NeutralMode.Brake);
+  } else {
+    m_rightFollowerMotor.setNeutralMode(NeutralMode.Coast);
+    m_leftFollowerMotor.setNeutralMode(NeutralMode.Coast);  
+    m_rightMotor.setNeutralMode(NeutralMode.Coast);
+    m_leftMotor.setNeutralMode(NeutralMode.Coast);
+  }
 }
 
 }
