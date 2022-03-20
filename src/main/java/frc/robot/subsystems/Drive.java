@@ -16,7 +16,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import io.github.oblarg.oblog.Loggable;
@@ -66,26 +65,11 @@ public class Drive extends SubsystemBase implements Loggable {
 
     m_rightFollowerMotor.setInverted(InvertType.FollowMaster);
     m_leftFollowerMotor.setInverted(InvertType.FollowMaster);
-
-    m_preventTilt.setDefaultOption("Tilt Assist OFF", false);
-    m_preventTilt.addOption("Tilt Assist ON", true);
-    
-    SmartDashboard.putData(m_preventTilt);
   
   }
 
   public void drive(double rightThrottle, double leftThrottle, double rotation) {
-  //  double rollAngleDegrees     = m_gyro.getRoll();
-
-   // if (m_preventTilt.getSelected() && Math.abs(rollAngleDegrees) > 10) {
-      //alter based on tilt
-     // m_robotDrive.arcadeDrive(m_accLimiter.calculate((rightThrottle - leftThrottle)), m_rotLimiter.calculate(-rotation));
       m_robotDrive.arcadeDrive((rightThrottle - leftThrottle), -rotation*.75);
-
-    // } else {}
-    //  m_robotDrive.arcadeDrive(m_accLimiter.calculate(rightThrottle - leftThrottle), m_rotLimiter.calculate(-rotation));
-    //  SmartDashboard.putNumber("TiltCorrection", +Math.sin( rollAngleDegrees * (Math.PI / 180.0)) * -1);
-    //  SmartDashboard.putNumber("Tilt",rollAngleDegrees);
     }
     public double deadband(double value){
       //Upper Deadband//
