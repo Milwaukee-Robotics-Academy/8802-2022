@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
     Logger.updateEntries();
 
     CommandScheduler.getInstance().run();
+    m_robotContainer.robotPeriodic();
   }
 
   /**
@@ -54,10 +55,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    m_robotContainer.disabledInit();
   }
 
   @Override
   public void disabledPeriodic() {
+    m_robotContainer.disabledPeriodic();
   }
   /**
    * This function is called periodically during autonomous.

@@ -33,6 +33,7 @@ public class Drive extends SubsystemBase implements Loggable {
   SendableChooser<Boolean> m_preventTilt = new SendableChooser<>();
   private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(.9);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2);
+
   
   @Log.Gyro
   private final AHRS m_gyro = new AHRS(SerialPort.Port.kUSB1);
@@ -118,6 +119,8 @@ public class Drive extends SubsystemBase implements Loggable {
 
   @Override
   public void periodic() {
+    // m_leftMotor.feed();
+    // m_rightMotor.feed();
     // This method will be called once per scheduler run
   }
 @Log(name = "Left Encoder")
@@ -141,4 +144,18 @@ public class Drive extends SubsystemBase implements Loggable {
   public double getHeading(){
     return m_gyro.getAngle();
   }
+  public void setBrake(boolean brake){
+  //   if (brake){
+  //   m_rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
+  //   m_leftFollowerMotor.setNeutralMode(NeutralMode.Brake);  
+  //   m_rightMotor.setNeutralMode(NeutralMode.Brake);
+  //   m_leftMotor.setNeutralMode(NeutralMode.Brake);
+  // } else {
+  //   m_rightFollowerMotor.setNeutralMode(NeutralMode.Coast);
+  //   m_leftFollowerMotor.setNeutralMode(NeutralMode.Coast);  
+  //   m_rightMotor.setNeutralMode(NeutralMode.Coast);
+  //   m_leftMotor.setNeutralMode(NeutralMode.Coast);
+  // }
+}
+
 }

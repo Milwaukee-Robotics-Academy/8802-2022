@@ -35,9 +35,19 @@ public RobotContainer() {
          driverController::getRightTriggerAxis, driverController::getLeftX, m_drive));
          // Add commands to the autonomous command chooser
 
-
-
-    //m_drive.setDefaultCommand(new TankDrive(() -> driverController.getLeftY(), () -> driverController.getRightY(), m_drive));
+         m_autoChooser.setDefaultOption("Blow", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(7).andThen(new InstantCommand(()->m_blower.stop(), m_blower).withTimeout(1)));
+         m_autoChooser.addOption("reverse",new InstantCommand(()-> m_drive.drive(0,0,0)).withTimeout(5));
+         m_autoChooser.addOption("Blow", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(10));
+           m_autoChooser.addOption("Blow.Reverse", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(1.4).andThen(
+           new DriveStraight(-.6,1.5,m_drive).withTimeout(5)));
+         m_autoChooser.addOption("Blow.Turn.Blow.Reverse", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(1.4).andThen(
+           new TurnToAngle(25,m_drive).withTimeout(3).andThen(
+             new DriveStraight(-.6,1.5,m_drive).withTimeout(5))));
+           // Shuffleboard.getTab("Intake").add("intake In", new InstantCommand(m_intake::rotateIn, m_intake));
+           // Shuffleboard.getTab("Intake").add("intake Out", new InstantCommand(m_intake::rotateOut, m_intake));
+           // Shuffleboard.getTab("Intake").add("intake Up", new InstantCommand(m_intake::moveUp, m_intake));
+           // Shuffleboard.getTab("Intake").add("intake Down", new InstantCommand(m_intake::moveDown, m_intake));
+           // Shuffleboard.getTab("Intake").add("intake Stop", new InstantCommand(m_intake::rotateStop, m_intake));
 }
 
 /**
@@ -52,12 +62,15 @@ public void configureButtonBindings() {
   // final JoystickButton operatorX = new JoystickButton(operatorController, XboxController.Button.kX.value);
   // final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
   // final JoystickButton oepratorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
-  // final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
-  // final JoystickButton operatorLeftStick = new JoystickButton(operatorController, XboxController.Button.kLeftStick.value);
+   final JoystickButton operatorStartButton = new JoystickButton(operatorController, XboxController.Button.kStart.value);
+   final JoystickButton operatorBackButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
+   // final JoystickButton operatorLeftStick = new JoystickButton(operatorController, XboxController.Button.kLeftStick.value);
   // final JoystickButton operatorRightStick = new JoystickButton(operatorController, XboxController.Button.kRightStick.value);
-  
-  operatorA.whenPressed(new InstantCommand(m_blower::blow, m_blower));
-  OperatorB.whenPressed(new InstantCommand(m_blower::stop, m_blower));
+  final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
+  final JoystickButton operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
+
+  operatorRightBumper.whenPressed(new InstantCommand(m_blower::blow, m_blower));
+  operatorLeftBumper.whenPressed(new InstantCommand(m_blower::stop, m_blower));
   // operatorX.whenPressed(new InstantCommand(m_intake::rotateStop, m_intake));
   // operatorX.whenReleased(new InstantCommand(m_intake::rotateStop, m_intake));
   // operatorRightBumper.whenPressed(new InstantCommand(m_intake::moveUp, m_intake));
@@ -66,28 +79,16 @@ public void configureButtonBindings() {
   // operatorStartButton.whenReleased(new InstantCommand(m_storage::storageStop));
   // operatorLeftStick.whenPressed(new InstantCommand(m_shooter::stopShooter));
   // operatorRightStick.whenPressed(new InstantCommand(m_shooter::runShooter));
-  final JoystickButton operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
-  final JoystickButton operatorRightBumper = new JoystickButton(driverController, XboxController.Button.kRightBumper.value);
-  operatorLeftBumper.whenPressed(new InstantCommand(m_climber::extend, m_climber))
+    operatorStartButton.whenPressed(new InstantCommand(m_climber::extend, m_climber))
     .whenReleased(new InstantCommand(m_climber::stop, m_climber));
-  operatorRightBumper.whenPressed(new InstantCommand(m_climber::unextend, m_climber))
+  operatorBackButton.whenPressed(new InstantCommand(m_climber::unextend, m_climber))
     .whenReleased(new InstantCommand(m_climber::stop, m_climber));
  }
 
 public void shuffleBoard(){
 // Put the chooser on the dashboard
 SmartDashboard.putData(m_autoChooser);
-m_autoChooser.setDefaultOption("reverse",new InstantCommand(()-> m_drive.drive(0,0,0)).withTimeout(5));
-m_autoChooser.addOption("Blow.Reverse", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(1.4).andThen(
-  new DriveStraight(-.6,1.5,m_drive).withTimeout(5)));
-m_autoChooser.addOption("Blow.Turn.Blow.Reverse", new InstantCommand(()->m_blower.blow(), m_blower).withTimeout(1.4).andThen(
-  new TurnToAngle(25,m_drive).withTimeout(3).andThen(
-    new DriveStraight(-.6,1.5,m_drive).withTimeout(5))));
-  // Shuffleboard.getTab("Intake").add("intake In", new InstantCommand(m_intake::rotateIn, m_intake));
-  // Shuffleboard.getTab("Intake").add("intake Out", new InstantCommand(m_intake::rotateOut, m_intake));
-  // Shuffleboard.getTab("Intake").add("intake Up", new InstantCommand(m_intake::moveUp, m_intake));
-  // Shuffleboard.getTab("Intake").add("intake Down", new InstantCommand(m_intake::moveDown, m_intake));
-  // Shuffleboard.getTab("Intake").add("intake Stop", new InstantCommand(m_intake::rotateStop, m_intake));
+
 }
 
   /**
@@ -96,7 +97,21 @@ m_autoChooser.addOption("Blow.Turn.Blow.Reverse", new InstantCommand(()->m_blowe
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+
     return m_autoChooser.getSelected();
   }
 
+  public void disabledInit(){
+     m_drive.setBrake(false);
+  }
+  public void disabledPeriodic(){
+
+  }
+
+  public void robotInit(){
+    m_drive.setBrake(false);
+  }
+  public void robotPeriodic(){
+  
+  }
 }
