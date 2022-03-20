@@ -13,8 +13,6 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,7 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import io.github.oblarg.oblog.Loggable;
-import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
 
 public class Drive extends SubsystemBase implements Loggable {
@@ -30,10 +27,9 @@ public class Drive extends SubsystemBase implements Loggable {
   private final WPI_TalonFX m_leftFollowerMotor = new WPI_TalonFX(DriveConstants.kLeftMotorRearPort);
   private final WPI_TalonFX m_rightMotor = new WPI_TalonFX(DriveConstants.kRightMotorFrontPort);
   private final WPI_TalonFX m_rightFollowerMotor = new WPI_TalonFX(DriveConstants.kRightMotorRearPort);
-  private final String c = "";
   SendableChooser<Boolean> m_preventTilt = new SendableChooser<>();
-  private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(.9);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2);
+  // private final SlewRateLimiter m_accLimiter = new SlewRateLimiter(.9);
+  // private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(2);
 
   
   @Log.Gyro
@@ -79,8 +75,7 @@ public class Drive extends SubsystemBase implements Loggable {
   }
 
   public void drive(double rightThrottle, double leftThrottle, double rotation) {
-    double rollAngleDegrees     = m_gyro.getRoll();
-
+  //  double rollAngleDegrees     = m_gyro.getRoll();
    // if (m_preventTilt.getSelected() && Math.abs(rollAngleDegrees) > 10) {
       //alter based on tilt
      // m_robotDrive.arcadeDrive(m_accLimiter.calculate((rightThrottle - leftThrottle)), m_rotLimiter.calculate(-rotation));
@@ -108,7 +103,7 @@ public class Drive extends SubsystemBase implements Loggable {
 
   }
 
-  @Config
+
   public void tank(double left, double right){
     m_leftMotor.set(left);
     m_rightMotor.set(right);
@@ -120,8 +115,6 @@ public class Drive extends SubsystemBase implements Loggable {
 
   @Override
   public void periodic() {
-    // m_leftMotor.feed();
-    // m_rightMotor.feed();
     // This method will be called once per scheduler run
   }
 @Log(name = "Left Encoder")
@@ -142,9 +135,19 @@ public class Drive extends SubsystemBase implements Loggable {
     return (2048*10.71)/(.1524*Math.PI);
   }
 
+/**
+ * Returns the total accumulated yaw angle (Z Axis, in degrees) reported by the sensor. 
+ * getAngle() 
+ * @return
+ */
   public double getHeading(){
     return m_gyro.getAngle();
   }
+
+  /**
+   * allow for the Neutral mode to be set to coast when disabled
+   * @param brake
+   */
   public void setBrake(boolean brake){
   if (brake){
     m_rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
