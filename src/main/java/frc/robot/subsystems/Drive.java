@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
@@ -60,16 +61,17 @@ public class Drive extends SubsystemBase implements Loggable {
     m_leftFollowerMotor.follow(m_leftMotor);
     m_rightFollowerMotor.follow(m_rightMotor);
 
-    m_rightMotor.setInverted(TalonFXInvertType.CounterClockwise);
-    m_leftMotor.setInverted(TalonFXInvertType.Clockwise);
+    m_rightMotor.setInverted(TalonFXInvertType.Clockwise);
+    m_leftMotor.setInverted(TalonFXInvertType.CounterClockwise);
 
     m_rightFollowerMotor.setInverted(InvertType.FollowMaster);
     m_leftFollowerMotor.setInverted(InvertType.FollowMaster);
-  
+    
+    
   }
 
   public void drive(double rightThrottle, double leftThrottle, double rotation) {
-      m_robotDrive.arcadeDrive((rightThrottle - leftThrottle), -rotation*.75);
+      m_robotDrive.arcadeDrive(-(rightThrottle - leftThrottle), rotation*.75);
     }
     public double deadband(double value){
       //Upper Deadband//
@@ -88,7 +90,9 @@ public class Drive extends SubsystemBase implements Loggable {
 
   }
 
-
+public void resetSensors() {
+  m_gyro.reset();
+}
   public void tank(double left, double right){
     m_leftMotor.set(left);
     m_rightMotor.set(right);

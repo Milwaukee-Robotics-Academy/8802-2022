@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Blow;
 import frc.robot.commands.DriveStraight;
 import frc.robot.commands.SplitArcadeDrive;
-import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.Turn;
 import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drive;
@@ -32,16 +33,19 @@ public class RobotContainer {
     m_autoChooser.setDefaultOption("Blow", new InstantCommand(() -> m_blower.blow(), m_blower).withTimeout(7)
         .andThen(new InstantCommand(() -> m_blower.stop(), m_blower).withTimeout(1)));
 
-    m_autoChooser.addOption("reverse", new InstantCommand(() -> m_drive.drive(0, 0, 0)).withTimeout(5));
-    m_autoChooser.addOption("Blow", new InstantCommand(() -> m_blower.blow(), m_blower).withTimeout(10));
+    m_autoChooser.addOption("reverse", new DriveStraight(.6, 1.5, m_drive).withTimeout(5));
+    m_autoChooser.addOption("Blow", new Blow(m_blower).withTimeout(5));
     m_autoChooser.addOption("Blow.Reverse",
-        new InstantCommand(() -> m_blower.blow(), m_blower).withTimeout(1.4).andThen(
-            new DriveStraight(-.6, 1.5, m_drive).withTimeout(5)));
+        new Blow(m_blower).withTimeout(5).andThen(
+          new DriveStraight(.6, 1.7, m_drive).withTimeout(5)
+            ));
 
     m_autoChooser.addOption("Blow.Turn.Blow.Reverse",
-        new InstantCommand(() -> m_blower.blow(), m_blower).withTimeout(1.4).andThen(
-            new TurnToAngle(25, m_drive).withTimeout(3).andThen(
-                new DriveStraight(-.6, 1.5, m_drive).withTimeout(5))));
+            new Blow(m_blower).withTimeout(1.4).andThen(
+            new Turn(.6, m_drive).withTimeout(.33).andThen(
+              new Blow(m_blower).withTimeout(5).andThen(
+              new DriveStraight(.6, 1.5, m_drive).withTimeout(5)
+              ))));
 
   }
 
