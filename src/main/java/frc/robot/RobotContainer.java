@@ -30,8 +30,8 @@ public class RobotContainer {
         driverController::getRightTriggerAxis, driverController::getLeftX, m_drive));
    
         // Add commands to the autonomous command chooser
-    m_autoChooser.setDefaultOption("Blow", new InstantCommand(() -> m_blower.blow(), m_blower).withTimeout(7)
-        .andThen(new InstantCommand(() -> m_blower.stop(), m_blower).withTimeout(1)));
+    m_autoChooser.setDefaultOption("Blow",  new Blow(m_blower).withTimeout(1.4));
+       
 
     m_autoChooser.addOption("reverse", new DriveStraight(.6, 1.5, m_drive).withTimeout(5));
     m_autoChooser.addOption("Blow", new Blow(m_blower).withTimeout(5));
@@ -41,7 +41,7 @@ public class RobotContainer {
             ));
 
     m_autoChooser.addOption("Blow.Turn.Blow.Reverse",
-            new Blow(m_blower).withTimeout(1.4).andThen(
+            new Blow(m_blower).withTimeout(.7).andThen(
             new Turn(.6, m_drive).withTimeout(.33).andThen(
               new Blow(m_blower).withTimeout(5).andThen(
               new DriveStraight(.6, 1.5, m_drive).withTimeout(5)
