@@ -21,6 +21,11 @@ public class RobotContainer {
   private final XboxController driverController = new XboxController(0);
   private final XboxController operatorController = new XboxController(1);
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  private double firstBlow = .7;
+  private double secondBlow = 5;
+  private double turnTime = .33;
+  private double driveDistance = 1.5;
+  private double turnSpeed = .6;
 
   public RobotContainer() {
 
@@ -34,17 +39,16 @@ public class RobotContainer {
        
 
     m_autoChooser.addOption("reverse", new DriveStraight(.6, 1.5, m_drive).withTimeout(5));
-    m_autoChooser.addOption("Blow", new Blow(m_blower).withTimeout(5));
     m_autoChooser.addOption("Blow.Reverse",
         new Blow(m_blower).withTimeout(5).andThen(
           new DriveStraight(.6, 1.7, m_drive).withTimeout(5)
             ));
 
-    m_autoChooser.addOption("Blow.Turn.Blow.Reverse",
-            new Blow(m_blower).withTimeout(.7).andThen(
-            new Turn(.6, m_drive).withTimeout(.33).andThen(
-              new Blow(m_blower).withTimeout(5).andThen(
-              new DriveStraight(.6, 1.5, m_drive).withTimeout(5)
+    m_autoChooser.addOption("With inputs",
+            new Blow(m_blower).withTimeout(0.001).andThen(
+            new Turn(.6, m_drive).withTimeout(.001).andThen(
+              new Blow(m_blower).withTimeout(.001).andThen(
+              new DriveStraight(.6, 1.5, m_drive).withTimeout(0.001)
               ))));
 
   }
@@ -70,6 +74,12 @@ public class RobotContainer {
   public void shuffleBoard() {
     // Put the chooser on the dashboard
     SmartDashboard.putData("Auto", m_autoChooser);
+    SmartDashboard.putNumber("1st Blow", firstBlow);
+    SmartDashboard.putNumber("2nd Blow", secondBlow);
+    SmartDashboard.putNumber("turnSpeed", turnSpeed);
+    SmartDashboard.putNumber("turnTime", turnTime);
+    SmartDashboard.putNumber("Driving", driveDistance);
+    
 
   }
 
@@ -81,7 +91,14 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     m_drive.setBrake(true);
-    return m_autoChooser.getSelected();
+
+    return new Blow(m_blower).withTimeout(SmartDashboard.getNumber("1st Blow", 0)).andThen(
+      new Turn(SmartDashboard.getNumber("turnSpeed", 0),m_drive).withTimeout(SmartDashboard.getNumber("turnTime", 0)).andThen(
+        new Blow(m_blower).withTimeout(SmartDashboard.getNumber("2nd Blow", 0)).andThen(
+        new DriveStraight(.6, 1.5, m_drive).withTimeout(SmartDashboard.getNumber("Driving", 0))
+      
+        )));
+    
   }
 
   public void disabledInit() {
