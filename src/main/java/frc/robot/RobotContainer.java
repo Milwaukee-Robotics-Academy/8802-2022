@@ -24,7 +24,7 @@ public class RobotContainer {
   private double firstBlow = .7;
   private double secondBlow = 5;
   private double turnTime = .33;
-  private double driveDistance = 1.5;
+  private double driveDistance = 3;
   private double turnSpeed = .6;
 
   public RobotContainer() {
