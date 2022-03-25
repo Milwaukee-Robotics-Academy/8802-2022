@@ -34,23 +34,7 @@ public class RobotContainer {
     m_drive.setDefaultCommand(new SplitArcadeDrive(driverController::getLeftTriggerAxis,
         driverController::getRightTriggerAxis, driverController::getLeftX, m_drive));
    
-        // Add commands to the autonomous command chooser
-    m_autoChooser.setDefaultOption("Blow",  new Blow(m_blower).withTimeout(1.4));
-       
-
-    m_autoChooser.addOption("reverse", new DriveStraight(.6, 1.5, m_drive).withTimeout(5));
-    m_autoChooser.addOption("Blow.Reverse",
-        new Blow(m_blower).withTimeout(5).andThen(
-          new DriveStraight(.6, 1.7, m_drive).withTimeout(5)
-            ));
-
-    m_autoChooser.addOption("With inputs",
-            new Blow(m_blower).withTimeout(0.001).andThen(
-            new Turn(.6, m_drive).withTimeout(.001).andThen(
-              new Blow(m_blower).withTimeout(.001).andThen(
-              new DriveStraight(.6, 1.5, m_drive).withTimeout(0.001)
-              ))));
-
+    
   }
 
   /**
@@ -73,7 +57,6 @@ public class RobotContainer {
 
   public void shuffleBoard() {
     // Put the chooser on the dashboard
-    SmartDashboard.putData("Auto", m_autoChooser);
     SmartDashboard.putNumber("1st Blow", firstBlow);
     SmartDashboard.putNumber("2nd Blow", secondBlow);
     SmartDashboard.putNumber("turnSpeed", turnSpeed);
