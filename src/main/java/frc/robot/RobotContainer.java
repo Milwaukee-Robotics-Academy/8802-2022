@@ -24,8 +24,10 @@ public class RobotContainer {
   private double firstBlow = .7;
   private double secondBlow = 5;
   private double turnTime = .33;
-  private double driveDistance = 3;
+  private double driveDistance = 3.5;
   private double turnSpeed = .6;
+  private double turnSpeed2 = .6;
+  private double turnTime2 = .33;
 
   public RobotContainer() {
 
@@ -79,7 +81,8 @@ public class RobotContainer {
     SmartDashboard.putNumber("turnSpeed", turnSpeed);
     SmartDashboard.putNumber("turnTime", turnTime);
     SmartDashboard.putNumber("Driving", driveDistance);
-    
+    SmartDashboard.putNumber("turnTime2", turnTime2);
+    SmartDashboard.putNumber("turnSpeed2", turnSpeed2);
 
   }
 
@@ -95,9 +98,10 @@ public class RobotContainer {
     return new Blow(m_blower).withTimeout(SmartDashboard.getNumber("1st Blow", 0)).andThen(
       new Turn(SmartDashboard.getNumber("turnSpeed", 0),m_drive).withTimeout(SmartDashboard.getNumber("turnTime", 0)).andThen(
         new Blow(m_blower).withTimeout(SmartDashboard.getNumber("2nd Blow", 0)).andThen(
-        new DriveStraight(.6, 1.5, m_drive).withTimeout(SmartDashboard.getNumber("Driving", 0))
+          new Turn(SmartDashboard.getNumber("turnSpeed2", 0),m_drive).withTimeout(SmartDashboard.getNumber("turnTime2", 0)).andThen(
+          new DriveStraight(.6, 1.5, m_drive).withTimeout(SmartDashboard.getNumber("Driving", 0))
       
-        )));
+    ))));
     
   }
 
